@@ -1,0 +1,22 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "exprore web-sockets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DenysPugachov/chat-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DenysPugachov/chat-app/issues"
+  },
+  "homepage": "https://github.com/DenysPugachov/chat-app#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

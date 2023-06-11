@@ -5,10 +5,8 @@ const app = express()
 const port = process.env.PORT || 3000
 
 
-app.get("/", (req, res) => {
-    res.send("Hello from chat-app.")
-})
-
+// Serving static files
+app.use(express.static(`public`))
 
 // start express server 
 app.listen(port, () => {

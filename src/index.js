@@ -1,16 +1,27 @@
 const express = require("express")
-const path = require("path")
+const app = express()
+const http = require("http")
+const server = http.createServer(app)
+const { Server } = require("socket.io")
+const io = new Server(server) //initialize a new instance of socket.io by passing the server (the HTTP server) object. 
 
-const app = express()// create an express server
 const port = process.env.PORT || 3000
-const publicDirectoryPath = path.join(__dirname, "../public") // __dirname = current directory (make path from current directory)
 
 
-// Serving static files
-app.use(express.static(publicDirectoryPath))
+app.get(`/`, (req, res) => {
+    res.sendFile(__dirname + `/index.html`)
+})
+
+io.on("connection", socket => {
+    // console.log("user connected.")
+    socket.on("chat message", msg => {
+        io.emit("chat message", msg)
+        // console.log(`message: ${msg}`)
+    })
+})
 
 // start express server 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Chat-app listening on port ${port}...`);
 })
 

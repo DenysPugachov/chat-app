@@ -6,16 +6,13 @@
 </head>
 
 <body>
-    <button id="decrement">-</button>
+    <h1>Chat app</h1>
 
-    <button id="increment">+</button>
+    <form id="form-message">
+        <input id="user-message-input" name="message" placeholder="Message..." autocomplete="off" />
+        <button>Send</button>
+    </form>
 
-    <div>
-        <ul id="messages"></ul>
-        <form id="form" action="">
-            <input id="input" autocomplete="off" /><button>Send</button>
-        </form>
-    </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/chat.js"></script>

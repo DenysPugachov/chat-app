@@ -1,13 +1,17 @@
 const socket = io()
 
-socket.on("countUpdated", count => {
-    console.log('chat.js receive countUpdated event.', `count: ${count}`);
+const formMessage = document.querySelector("#form-message")
+
+
+formMessage.addEventListener("submit", e => {
+    e.preventDefault() // prevent page refreshing after submit
+    const userMessage = e.target.elements.message.value //document.querySelector("#user-message-input").value
+    socket.emit("sendMessage", userMessage)
 })
 
-document.querySelector("#increment").addEventListener("click", () => {
-    socket.emit("incrementCount")
+socket.on("spreadMessage", msg => {
+    console.log('message received :>> ', msg);
 })
 
-document.querySelector("#decrement").addEventListener("click", () => {
-    socket.emit("decrementCount")
-})
+
+

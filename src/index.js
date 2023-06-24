@@ -9,13 +9,28 @@ const io = socketio(server)
 const port = process.env.PORT || 3000
 const publicDirPath = path.join(__dirname, "../public")
 
-app.use(express.static(publicDirPath))// serve files from static folder /public
+// server gets files from static folder /public
+app.use(express.static(publicDirPath))
 
+// when new client is connected
 io.on("connection", socket => {
     console.log("+++ New socket connection. +++")
 
+    // io.emit => to EVERYONE
+    // socket.on =>  to SINGLE client that refers to ...
+    // socket.broadcast.emit => to EVERYONE EXCEPT ME
+
+    socket.emit("message", "Wellcome!")
+
+    socket.broadcast.emit("message", "A new user has joined!")
+
     socket.on("sendMessage", msg => {
         io.emit("spreadMessage", msg)
+    })
+
+    //Notify user about disconnected user
+    socket.on("disconnect", () => {
+        io.emit("message", "A user has left!")
     })
 })
 

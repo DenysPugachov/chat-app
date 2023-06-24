@@ -13,5 +13,6 @@ socket.on("spreadMessage", msg => {
     console.log('message received :>> ', msg);
 })
 
-
-
+socket.on("message", msg => {
+    console.log(msg)
+})

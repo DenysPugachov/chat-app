@@ -26,8 +26,16 @@ io.on("connection", socket => {
     socket.broadcast.emit("message", "A new user has joined!")
 
     socket.on("sendMessage", (msg, cbAcknowledgement) => {
-        io.emit("spreadMessage", msg)
-        cbAcknowledgement("Acknowledgement from index.js: Delivered!")
+        //init bad-words lib
+        const filter = new Filter()
+
+        // message containt bad words?
+        if (filter.isProfane(msg)) {
+            return cbAcknowledgement("Profanity is no allowed!")
+        }
+
+        socket.broadcast.emit("spreadMessage", msg)
+        cbAcknowledgement()
     })
 
     //Notify user about disconnected user

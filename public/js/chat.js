@@ -8,8 +8,11 @@ formMessage.addEventListener("submit", e => {
     const userMessage = e.target.elements.message.value //document.querySelector("#user-message-input").value
 
     // Last arg: cb() => acknowledgement event for server
-    socket.emit("sendMessage", userMessage, (confirmation) => {
-        console.log("This message was delevered. from chat.js", confirmation)
+    socket.emit("sendMessage", userMessage, (isContainProfanity) => {
+        if (isContainProfanity) {
+            console.error(isContainProfanity)
+        }
+        console.log("This message was delevered.")
     })
 })
 

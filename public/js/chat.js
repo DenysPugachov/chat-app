@@ -1,29 +1,45 @@
+
 const socket = io()
+// Elements
+const $messageForm = document.querySelector("#message-form")
+const $shareLocationBtn = document.querySelector("#share-location-btn")
+const $messageSendBtn = document.querySelector("#message-send-btn")
+const $messageFormInput = document.querySelector("#message-input")
 
-const formMessage = document.querySelector("#form-message")
-const shareLocationBtn = document.querySelector("#share-location-btn")
+$messageFormInput.focus()
 
-formMessage.addEventListener("submit", e => {
-    e.preventDefault() // prevent page refreshing after submit
-    const userMessage = e.target.elements.message.value //document.querySelector("#user-message-input").value
+$messageForm.addEventListener("submit", e => {
+    e.preventDefault()
+
+    $messageSendBtn.setAttribute("disabled", "enabled")
+
+    const userMessage = e.target.elements.message.value
 
     // Last arg: cb() => acknowledgement event for server
-    socket.emit("sendMessage", userMessage, (isContainProfanity) => {
-        if (isContainProfanity) {
-            console.error(isContainProfanity)
+    socket.emit("sendMessage", userMessage, (profanity) => {
+        $messageSendBtn.removeAttribute("disabled")
+        $messageFormInput.value = ""
+        $messageFormInput.focus()
+
+        if (profanity) {
+            console.error(profanity)
         }
         console.log("This message was delevered.")
     })
 })
 
-shareLocationBtn.addEventListener("click", () => {
+$shareLocationBtn.addEventListener("click", () => {
+    $shareLocationBtn.setAttribute("disabled", "disabled")
+
     if (!navigator.geolocation) {
         alert("Geolocation is not supported by your browser.")
     }
-    // share user location
+
     navigator.geolocation.getCurrentPosition(position => {
         const { latitude, longitude } = position.coords
+
         socket.emit("shareLocation", { latitude, longitude }, () => {
+            $shareLocationBtn.removeAttribute("disabled")
             console.log("Location shared!")
         })
     })

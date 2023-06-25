@@ -38,7 +38,6 @@ io.on("connection", socket => {
         cbAcknowledgement()
     })
 
-    //Notify user about disconnected user
     socket.on("disconnect", () => {
         io.emit("message", "A user has left!")
     })

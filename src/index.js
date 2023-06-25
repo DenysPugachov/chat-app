@@ -43,8 +43,9 @@ io.on("connection", socket => {
         io.emit("message", "A user has left!")
     })
 
-    socket.on("shareLocation", coords => {
+    socket.on("shareLocation", (coords, callback) => {
         io.emit("message", `https://google.com/maps/?q=${coords.latitude},${coords.longitude}`)
+        callback()
     })
 })
 

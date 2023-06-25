@@ -23,7 +23,9 @@ shareLocationBtn.addEventListener("click", () => {
     // share user location
     navigator.geolocation.getCurrentPosition(position => {
         const { latitude, longitude } = position.coords
-        socket.emit("shareLocation", { latitude, longitude })
+        socket.emit("shareLocation", { latitude, longitude }, () => {
+            console.log("Location shared!")
+        })
     })
 })
 

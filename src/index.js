@@ -2,6 +2,7 @@ const path = require("path")
 const express = require("express")
 const http = require("http")
 const socketio = require("socket.io")
+const Filter = require("bad-words")
 
 const app = express()
 const server = http.createServer(app)
@@ -24,8 +25,9 @@ io.on("connection", socket => {
 
     socket.broadcast.emit("message", "A new user has joined!")
 
-    socket.on("sendMessage", msg => {
+    socket.on("sendMessage", (msg, cbAcknowledgement) => {
         io.emit("spreadMessage", msg)
+        cbAcknowledgement("Acknowledgement from index.js: Delivered!")
     })
 
     //Notify user about disconnected user

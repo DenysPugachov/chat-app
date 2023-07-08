@@ -1,10 +1,14 @@
 
 const socket = io()
-// Elements
+
 const $messageForm = document.querySelector("#message-form")
 const $shareLocationBtn = document.querySelector("#share-location-btn")
 const $messageSendBtn = document.querySelector("#message-send-btn")
 const $messageFormInput = document.querySelector("#message-input")
+
+// Mustache templates
+const $messageTemplate = document.getElementById('message-template').innerHTML;
+const $messages = document.getElementById("messages")
 
 $messageFormInput.focus()
 
@@ -24,7 +28,7 @@ $messageForm.addEventListener("submit", e => {
         if (profanity) {
             console.error(profanity)
         }
-        console.log("This message was delevered.")
+        console.log("Sended :>>", userMessage)
     })
 })
 
@@ -47,12 +51,20 @@ $shareLocationBtn.addEventListener("click", () => {
 
 
 socket.on("spreadMessage", msg => {
-    console.log('message received :>> ', msg);
+    console.log('Spreaded :>> ', msg);
 })
 
 socket.on("message", msg => {
-    console.log(msg)
+    renderMessage(msg)
+    console.log("Received :>>", msg)
 })
+
+
+// Use Mustache templeate lib to render the message
+function renderMessage(message) {
+    const messageHTML = Mustache.render($messageTemplate, { message });
+    $messages.insertAdjacentHTML("beforeend", messageHTML)
+}
 
 
 // Event acknowledgement: [ игнолэджмент ] => признание, подтверждение события

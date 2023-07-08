@@ -8,6 +8,16 @@
 <body>
     <h1>Chat app</h1>
 
+    <!-- mustashe -->
+    <div id="messages"></div>
+    <script id="message-template" type="text/html">
+        <ul>
+            <li>
+                <p> {{ message }} </p>
+            </li>
+        </ul>
+    </script>
+
     <form id="message-form">
         <input id="message-input" name="message" placeholder="Message..." autocomplete="off" />
         <button id="message-send-btn">Send</button>
@@ -16,6 +26,7 @@
     <button id="share-location-btn">Share location</button>
 
 </body>
+<script src="js/mustache.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/chat.js"></script>
 

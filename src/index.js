@@ -36,6 +36,8 @@ io.on("connection", socket => {
 
         socket.broadcast.emit("spreadMessage", msg)
         cbAcknowledgement()
+
+        io.emit("message", msg)
     })
 
     socket.on("disconnect", () => {

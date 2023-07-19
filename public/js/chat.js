@@ -8,6 +8,7 @@ const $messageFormInput = document.querySelector("#message-input")
 
 // Mustache templates
 const $messageTemplate = document.getElementById('message-template').innerHTML;
+const $locationTemplate = document.getElementById('location-message-template').innerHTML;
 const $messages = document.getElementById("messages")
 
 $messageFormInput.focus()
@@ -39,9 +40,18 @@ $shareLocationBtn.addEventListener("click", () => {
         alert("Geolocation is not supported by your browser.")
     }
 
+    if (!window.navigator.onLine) {
+        socket.emit("shareLocation", {
+            latitude: 0.0000,
+            longitude: 0.00000
+        }, () => {
+            $shareLocationBtn.removeAttribute("disabled")
+            console.log("Offline location shared!")
+        })
+    }
+
     navigator.geolocation.getCurrentPosition(position => {
         const { latitude, longitude } = position.coords
-
         socket.emit("shareLocation", { latitude, longitude }, () => {
             $shareLocationBtn.removeAttribute("disabled")
             console.log("Location shared!")
@@ -59,11 +69,21 @@ socket.on("message", msg => {
     console.log("Received :>>", msg)
 })
 
+socket.on("shareLocation", location => {
+    renderLocationMessage(location)
+    console.log("Received :>>", location)
+})
+
 
 // Use Mustache templeate lib to render the message
 function renderMessage(message) {
     const messageHTML = Mustache.render($messageTemplate, { message });
     $messages.insertAdjacentHTML("beforeend", messageHTML)
+}
+
+function renderLocationMessage(locationUrl) {
+    const html = Mustache.render($locationTemplate, { locationUrl });
+    $messages.insertAdjacentHTML("beforeend", html)
 }
 
 

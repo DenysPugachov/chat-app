@@ -18,12 +18,21 @@
         </ul>
     </script>
 
+    <script id="location-message-template" type="text/html">
+        <ul>
+            <li>
+                <p> <a href="{{ locationUrl }}" target="_blank">My current location.</a> </p>
+            </li>
+        </ul>
+    </script>
+
     <form id="message-form">
         <input id="message-input" name="message" placeholder="Message..." autocomplete="off" />
         <button id="message-send-btn">Send</button>
     </form>
     <br>
     <button id="share-location-btn">Share location</button>
+
 
 </body>
 <script src="js/mustache.js"></script>

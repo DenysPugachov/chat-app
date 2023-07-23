@@ -2,38 +2,51 @@
 <html>
 
 <head>
-    <title>Chat</title>
+    <title>Chat App</title>
+    <link rel="icon" href="">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <h1>Chat app</h1>
+    <div class="chat">
+        <div class="chat__sidebar"> </div>
 
-    <!-- mustashe -->
-    <div id="messages"></div>
-    <script id="message-template" type="text/html">
-        <ul>
-            <li>
-                <p>{{createdAt}} - {{ message }} </p>
-            </li>
-        </ul>
-    </script>
+        <div class="chat__main">
+            <div id="messages" class="chat__messages"></div>
 
-    <script id="location-message-template" type="text/html">
-        <ul>
-            <li>
-                <p>{{ createdAt }} - <a href="{{ locationUrl }}" target="_blank">My current location.</a> </p>
-            </li>
-        </ul>
-    </script>
-
-    <form id="message-form">
-        <input id="message-input" name="message" placeholder="Message..." autocomplete="off" />
-        <button id="message-send-btn">Send</button>
-    </form>
-    <br>
-    <button id="share-location-btn">Share location</button>
+            <div class="compose chat__footer">
+                <form id="message-form">
+                    <input id="message-input" name="message" placeholder="Message..." autocomplete="off" />
+                    <button id="message-send-btn">Send</button>
+                </form>
+                <button id="share-location-btn">Share location</button>
+            </div>
 
 
+            <script id="message-template" type="text/html">
+                <div class="message">
+                    <p> 
+                        <span class="message__name">User Name</span>    
+                        <span class="message__meta">{{createdAt}}</span>    
+                    </p>
+                    <p> {{ message }} </p>
+                </div>
+            </script>
+
+            <script id="location-message-template" type="text/html">
+                <div class="message"> 
+                    <p>
+                        <span class="message__name">User Name</span>
+                        <span class="message__meta">{{createdAt}}</span>
+                    </p>
+                    <p><a href="{{ locationUrl }}" target="_blank">My current location.</a> </p>
+                </div>
+                    
+            </script>
+
+
+        </div>
+    </div>
 </body>
 <script src="js/mustache.js"></script>
 <script src="/socket.io/socket.io.js"></script>

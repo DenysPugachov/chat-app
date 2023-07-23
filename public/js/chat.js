@@ -1,4 +1,3 @@
-
 const socket = io()
 
 const $messageForm = document.querySelector("#message-form")
@@ -70,18 +69,21 @@ socket.on("message", msg => {
 })
 
 socket.on("shareLocation", location => {
-    renderLocationMessage(renderMessage(location))
+    renderLocationMessage(location)
     console.log("Received :>>", location)
 })
 
 
 // Use Mustache templeate lib to render the message
 function renderMessage(message) {
-    const messageHTML = Mustache.render($messageTemplate, { message: message.text, createdAt: message.createdAt });
+    const messageHTML = Mustache.render($messageTemplate, { message: message.text, createdAt: moment(message.createdAt).format("hh:mm:ss") });
     $messages.insertAdjacentHTML("beforeend", messageHTML)
 }
 
-function renderLocationMessage(location) {
-    const html = Mustache.render($locationTemplate, { locationUrl: location.text, createdAt: location.createdAt });
+function renderLocationMessage(locationUrl) {
+    const timeStamp = new Date().getTime()
+    const currentTime = moment(timeStamp).format("hh:mm:ss")
+    const html = Mustache.render($locationTemplate, { locationUrl, createdAt: currentTime });
+    console.log('locationUrl :>> ', locationUrl);
     $messages.insertAdjacentHTML("beforeend", html)
 }

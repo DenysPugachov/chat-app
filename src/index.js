@@ -46,7 +46,7 @@ io.on("connection", socket => {
     })
 
     socket.on("shareLocation", (coords, callback) => {
-        io.emit("shareLocation", generateMessage(`https://google.com/maps/?q=${coords.latitude},${coords.longitude}`))
+        io.emit("shareLocation", `https://google.com/maps/?q=${coords.latitude},${coords.longitude}`)
         callback()
     })
 })

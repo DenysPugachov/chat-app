@@ -22,9 +22,18 @@ io.on("connection", socket => {
     // socket.on =>  to SINGLE client that refers to ...
     // socket.broadcast.emit => to EVERYONE EXCEPT ME
 
-    socket.emit("message", generateMessage("Welcome!"))
 
-    socket.broadcast.emit("message", generateMessage("A new user has joined!"))
+    socket.on("join", ({ username, room }) => {
+        // .join() connet to the room name argument
+        // emiting events for just that room
+        socket.join(room)
+
+        //io.to.emit => to everybody in a specific room.
+        //socket.broadcast.to.emit => all in a room, excepts sender.
+
+        socket.emit("message", generateMessage("Welcome!"))
+        socket.broadcast.to(room).emit("message", generateMessage(`${username} has joined the ${room} room.`))
+    })
 
     socket.on("sendMessage", (msg, cbAcknowledgement) => {
         //init bad-words lib
@@ -38,7 +47,7 @@ io.on("connection", socket => {
         socket.broadcast.emit("spreadMessage", msg)
         cbAcknowledgement()
 
-        io.emit("message", generateMessage(msg))
+        io.to("Home").emit("message", generateMessage(msg))
     })
 
     socket.on("disconnect", () => {

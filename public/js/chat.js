@@ -10,6 +10,10 @@ const $messageTemplate = document.getElementById('message-template').innerHTML;
 const $locationTemplate = document.getElementById('location-message-template').innerHTML;
 const $messages = document.getElementById("messages")
 
+//Options 
+// parse data from the url(querystring) to object
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+
 $messageFormInput.focus()
 
 $messageForm.addEventListener("submit", e => {
@@ -90,3 +94,6 @@ function renderLocationMessage(locationObj) {
     });
     $messages.insertAdjacentHTML("beforeend", html)
 }
+
+//emit an event when someone join the specific room
+socket.emit("join", { username, room })

@@ -70,23 +70,18 @@ socket.on("message", msg => {
 })
 
 socket.on("shareLocation", location => {
-    renderLocationMessage(location)
+    renderLocationMessage(renderMessage(location))
     console.log("Received :>>", location)
 })
 
 
 // Use Mustache templeate lib to render the message
 function renderMessage(message) {
-    const messageHTML = Mustache.render($messageTemplate, { message });
+    const messageHTML = Mustache.render($messageTemplate, { message: message.text, createdAt: message.createdAt });
     $messages.insertAdjacentHTML("beforeend", messageHTML)
 }
 
-function renderLocationMessage(locationUrl) {
-    const html = Mustache.render($locationTemplate, { locationUrl });
+function renderLocationMessage(location) {
+    const html = Mustache.render($locationTemplate, { locationUrl: location.text, createdAt: location.createdAt });
     $messages.insertAdjacentHTML("beforeend", html)
 }
-
-
-// Event acknowledgement: [ игнолэджмент ] => признание, подтверждение события
-// server (emit) -> client (receive) --acknowledgement--> server
-// client (emit) -> server (receive) --acknowledgement -> client 

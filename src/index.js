@@ -3,6 +3,7 @@ const express = require("express")
 const http = require("http")
 const socketio = require("socket.io")
 const Filter = require("bad-words")
+const { generateMessage } = require("./utils/messages")
 
 const app = express()
 const server = http.createServer(app)
@@ -21,9 +22,9 @@ io.on("connection", socket => {
     // socket.on =>  to SINGLE client that refers to ...
     // socket.broadcast.emit => to EVERYONE EXCEPT ME
 
-    socket.emit("message", "Wellcome!")
+    socket.emit("message", generateMessage("Welcome!"))
 
-    socket.broadcast.emit("message", "A new user has joined!")
+    socket.broadcast.emit("message", generateMessage("A new user has joined!"))
 
     socket.on("sendMessage", (msg, cbAcknowledgement) => {
         //init bad-words lib
@@ -37,15 +38,15 @@ io.on("connection", socket => {
         socket.broadcast.emit("spreadMessage", msg)
         cbAcknowledgement()
 
-        io.emit("message", msg)
+        io.emit("message", generateMessage(msg))
     })
 
     socket.on("disconnect", () => {
-        io.emit("message", "A user has left!")
+        io.emit("message", generateMessage("A user has left!"))
     })
 
     socket.on("shareLocation", (coords, callback) => {
-        io.emit("shareLocation", `https://google.com/maps/?q=${coords.latitude},${coords.longitude}`)
+        io.emit("shareLocation", generateMessage(`https://google.com/maps/?q=${coords.latitude},${coords.longitude}`))
         callback()
     })
 })

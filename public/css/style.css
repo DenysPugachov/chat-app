@@ -35,6 +35,8 @@ button {
     background: #265f82;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin: 10px 0;
+    width: 100%;
 }
 
 button:hover {
@@ -68,7 +70,7 @@ button:disabled {
     background: rgba(250, 250, 250, 0.9);
     border: 1px solid #e1e1e1;
     border-radius: 5px;
-    padding: 0 20px;
+    padding: 20px;
     margin: 20px;
     width: 230px;
 }

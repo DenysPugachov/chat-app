@@ -7,50 +7,40 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
-    <div class="chat">
-        <div class="chat__sidebar"> </div>
+<!-- <body>
+    <div class="centered-form">
+        <div class="centered-form__form">
 
-        <div class="chat__main">
-            <div id="messages" class="chat__messages"></div>
-
-            <div class="compose chat__footer">
-                <form id="message-form">
-                    <input id="message-input" name="message" placeholder="Message..." autocomplete="off" />
-                    <button id="message-send-btn">Send</button>
-                </form>
-                <button id="share-location-btn">Share location</button>
-            </div>
-
-
-            <script id="message-template" type="text/html">
-                <div class="message">
-                    <p> 
-                        <span class="message__name">User Name</span>    
-                        <span class="message__meta">{{createdAt}}</span>    
-                    </p>
-                    <p> {{ message }} </p>
-                </div>
-            </script>
-
-            <script id="location-message-template" type="text/html">
-                <div class="message"> 
-                    <p>
-                        <span class="message__name">User Name</span>
-                        <span class="message__meta">{{createdAt}}</span>
-                    </p>
-                    <p><a href="{{ locationUrl }}" target="_blank">My current location.</a> </p>
-                </div>
-                    
-            </script>
-
-
+            <form action="/chat.html">
+                <label>Display name</label>
+                <input type="text" name="username" playsholder="Display name" required>
+                <label>Room</label>
+                <input type="text" name="room" placeholder="Room" required>
+                <button>Join</button>
+            </form>
         </div>
     </div>
+</body> -->
+
+<body class="centered-form">
+    <div class="centered-form__form">
+        <form action="/chat.html">
+            <div class="form-field">
+                <h3>Join a Chat<h3>
+            </div>
+            <div class="form-field">
+                <label>Display name</label>
+                <input type="text" name="name" autofocus />
+            </div>
+            <div class="form-field">
+                <label>Room name</label>
+                <input type="text" name="room" />
+            </div>
+            <div class="form-field">
+                <button>Join</button>
+            </div>
+        </form>
+    </div>
 </body>
-<script src="js/mustache.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="js/moment.min.js"></script>
-<script src="js/chat.js"></script>
 
 </html>

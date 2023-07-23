@@ -68,22 +68,25 @@ socket.on("message", msg => {
     console.log("Received :>>", msg)
 })
 
-socket.on("shareLocation", location => {
-    renderLocationMessage(location)
-    console.log("Received :>>", location)
+socket.on("shareLocation", locationObj => {
+    renderLocationMessage(locationObj)
+    console.log("Received :>>", locationObj)
 })
 
 
 // Use Mustache templeate lib to render the message
 function renderMessage(message) {
-    const messageHTML = Mustache.render($messageTemplate, { message: message.text, createdAt: moment(message.createdAt).format("hh:mm:ss") });
+    const messageHTML = Mustache.render($messageTemplate, {
+        message: message.text,
+        createdAt: moment(message.createdAt).format("hh:mm:ss")
+    });
     $messages.insertAdjacentHTML("beforeend", messageHTML)
 }
 
-function renderLocationMessage(locationUrl) {
-    const timeStamp = new Date().getTime()
-    const currentTime = moment(timeStamp).format("hh:mm:ss")
-    const html = Mustache.render($locationTemplate, { locationUrl, createdAt: currentTime });
-    console.log('locationUrl :>> ', locationUrl);
+function renderLocationMessage(locationObj) {
+    const html = Mustache.render($locationTemplate, {
+        locationUrl: locationObj.url,
+        createdAt: moment(locationObj.createdAt).format("hh:mm:ss")
+    });
     $messages.insertAdjacentHTML("beforeend", html)
 }

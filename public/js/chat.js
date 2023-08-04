@@ -96,4 +96,9 @@ function renderLocationMessage(locationObj) {
 }
 
 //emit an event when someone join the specific room
-socket.emit("join", { username, room })
+socket.emit("join", { username, room }, (error) => {
+    if (error) {
+        alert(error)
+        location.href = "/" // redirect to join page
+    }
+})

@@ -1,11 +1,9 @@
 const users = []
 
 const addUser = ({ id, username, room }) => {
-    // clean data
     username = username.trim().toLowerCase()
     room = room.trim().toLowerCase()
 
-    // validate data
     if (!username || !room) {
         return {
             error: "User name and room are required!"
@@ -16,6 +14,7 @@ const addUser = ({ id, username, room }) => {
     const isUserExist = users.find(user => {
         return user.username === username && user.room === room
     })
+
     if (isUserExist) {
         return { error: `User name ${username} is already taken.` }
     }
@@ -23,7 +22,7 @@ const addUser = ({ id, username, room }) => {
     // store user
     const user = { id, username, room }
     users.push(user)
-    return user
+    return { user }
 }
 
 const removeUser = id => {
@@ -43,4 +42,11 @@ const getUser = id => {
 const getUsersInRoom = room => {
     room = room.trim().toLowerCase()
     return users.filter(user => user.room === room)
+}
+
+module.exports = {
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom
 }

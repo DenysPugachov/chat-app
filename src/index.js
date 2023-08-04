@@ -4,6 +4,11 @@ const http = require("http")
 const socketio = require("socket.io")
 const Filter = require("bad-words")
 const { generateMessage, generateLocationMessage } = require("./utils/messages")
+const { addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom } = require("./utils/users")
+
 
 const app = express()
 const server = http.createServer(app)
@@ -18,21 +23,19 @@ app.use(express.static(publicDirPath))
 io.on("connection", socket => {
     console.log("+++ New socket connection. +++")
 
-    // io.emit => to EVERYONE
-    // socket.on =>  to SINGLE client that refers to ...
-    // socket.broadcast.emit => to EVERYONE EXCEPT ME
+    socket.on("join", ({ username, room }, cbAcknowledgement) => {
+        const { error, user } = addUser({ id: socket.id, username, room })
 
+        if (error) {
+            return cbAcknowledgement(error)
+        }
 
-    socket.on("join", ({ username, room }) => {
-        // .join() connet to the room name argument
-        // emiting events for just that room
-        socket.join(room)
-
-        //io.to.emit => to everybody in a specific room.
-        //socket.broadcast.to.emit => all in a room, excepts sender.
+        socket.join(user.room)
 
         socket.emit("message", generateMessage("Welcome!"))
-        socket.broadcast.to(room).emit("message", generateMessage(`${username} has joined the ${room} room.`))
+        socket.broadcast.to(user.room).emit("message", generateMessage(`${username} has joined the ${room} room.`))
+
+        cbAcknowledgement()
     })
 
     socket.on("sendMessage", (msg, cbAcknowledgement) => {
@@ -51,7 +54,11 @@ io.on("connection", socket => {
     })
 
     socket.on("disconnect", () => {
-        io.emit("message", generateMessage("A user has left!"))
+        const removedUser = removeUser(socket.id)
+
+        if (removedUser) {
+            io.to(removedUser.room).emit("message", generateMessage(`A ${removedUser.username} has left!`))
+        }
     })
 
     socket.on("shareLocation", (coords, callback) => {

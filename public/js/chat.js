@@ -32,7 +32,6 @@ $messageForm.addEventListener("submit", e => {
         if (profanity) {
             console.error(profanity)
         }
-        console.log("Sended :>>", userMessage)
     })
 })
 
@@ -81,6 +80,7 @@ socket.on("shareLocation", locationObj => {
 // Use Mustache templeate lib to render the message
 function renderMessage(message) {
     const messageHTML = Mustache.render($messageTemplate, {
+        username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format("hh:mm:ss")
     });
@@ -88,7 +88,9 @@ function renderMessage(message) {
 }
 
 function renderLocationMessage(locationObj) {
+    console.log('username :>> ', username);
     const html = Mustache.render($locationTemplate, {
+        username: locationObj.username,
         locationUrl: locationObj.url,
         createdAt: moment(locationObj.createdAt).format("hh:mm:ss")
     });

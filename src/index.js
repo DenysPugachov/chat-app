@@ -33,7 +33,7 @@ io.on("connection", socket => {
         socket.join(user.room)
 
         socket.emit("message", generateMessage("Welcome!"))
-        socket.broadcast.to(user.room).emit("message", generateMessage(`${username} has joined the ${room} room.`))
+        socket.broadcast.to(user.room).emit("message", generateMessage("Admin", `${username} has joined the ${room} room.`))
 
         cbAcknowledgement()
     })
@@ -41,29 +41,28 @@ io.on("connection", socket => {
     socket.on("sendMessage", (msg, cbAcknowledgement) => {
         //init bad-words lib
         const filter = new Filter()
-
         // message containt bad words?
         if (filter.isProfane(msg)) {
             return cbAcknowledgement("Profanity is no allowed!")
         }
 
-        socket.broadcast.emit("spreadMessage", msg)
-        cbAcknowledgement()
+        const userSender = getUser(socket.id)
 
-        io.to("Home").emit("message", generateMessage(msg))
+        io.to(userSender.room).emit("message", generateMessage(userSender.username, msg))
+        cbAcknowledgement()
     })
 
     socket.on("disconnect", () => {
         const removedUser = removeUser(socket.id)
-
         if (removedUser) {
-            io.to(removedUser.room).emit("message", generateMessage(`A ${removedUser.username} has left!`))
+            io.to(removedUser.room).emit("message", generateMessage("Admin", `A ${removedUser.username} has left!`))
         }
     })
 
-    socket.on("shareLocation", (coords, callback) => {
-        io.emit("shareLocation", generateLocationMessage(`https://google.com/maps/?q=${coords.latitude},${coords.longitude}`))
-        callback()
+    socket.on("shareLocation", (coords, cbAcknowledgement) => {
+        const userSender = getUser(socket.id)
+        io.to(userSender.room).emit("shareLocation", generateLocationMessage(userSender.username, `https://google.com/maps/?q=${coords.latitude},${coords.longitude}`))
+        cbAcknowledgement()
     })
 })
 

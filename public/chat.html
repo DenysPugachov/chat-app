@@ -9,7 +9,7 @@
 
 <body>
     <div class="chat">
-        <div class="chat__sidebar"> </div>
+        <div class="chat__sidebar" id="sidebar"> </div>
 
         <div class="chat__main">
             <div id="messages" class="chat__messages"></div>
@@ -40,10 +40,19 @@
                         <span class="message__meta">{{createdAt}}</span>
                     </p>
                     <p><a href="{{ locationUrl }}" target="_blank">My current location.</a> </p>
-                </div>
-                    
+                </div>            
             </script>
 
+            <script id="sidebar-template" type="text/html">
+                <h3>{{room}}</h3>
+                <h4>Users in room:</h4>
+                <ul class="users">
+                    <!-- iterate user arrray -->
+                    {{#users}}
+                    <li>{{username}}</li>
+                    {{/users}}
+                </ul>
+            </script>
 
         </div>
     </div>

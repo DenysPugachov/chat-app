@@ -4,11 +4,12 @@ const $messageForm = document.querySelector("#message-form")
 const $shareLocationBtn = document.querySelector("#share-location-btn")
 const $messageSendBtn = document.querySelector("#message-send-btn")
 const $messageFormInput = document.querySelector("#message-input")
+const $messages = document.getElementById("messages")
 
 // Mustache templates
 const $messageTemplate = document.getElementById('message-template').innerHTML;
 const $locationTemplate = document.getElementById('location-message-template').innerHTML;
-const $messages = document.getElementById("messages")
+const $sidebarTemplate = document.querySelector("#sidebar-template").innerHTML;
 
 //Options 
 // parse data from the url(querystring) to object
@@ -68,12 +69,20 @@ socket.on("spreadMessage", msg => {
 
 socket.on("message", msg => {
     renderMessage(msg)
-    console.log("Received :>>", msg)
+    console.log("Received :>>", msg.text)
 })
 
 socket.on("shareLocation", locationObj => {
     renderLocationMessage(locationObj)
     console.log("Received :>>", locationObj)
+})
+
+socket.on("roomData", ({ room, users }) => {
+    const html = Mustache.render($sidebarTemplate, {
+        room,
+        users
+    })
+    document.querySelector("#sidebar").innerHTML = html
 })
 
 
@@ -88,7 +97,6 @@ function renderMessage(message) {
 }
 
 function renderLocationMessage(locationObj) {
-    console.log('username :>> ', username);
     const html = Mustache.render($locationTemplate, {
         username: locationObj.username,
         locationUrl: locationObj.url,
@@ -96,6 +104,14 @@ function renderLocationMessage(locationObj) {
     });
     $messages.insertAdjacentHTML("beforeend", html)
 }
+
+// function renderSidebar({ room, usersInRoom }) {
+//     const html = Mustache.render($sidebarTemplate, {
+//         room,
+//         usersInRoom
+//     })
+//     $chatSidebar.insertAdjacentHTML("beforeend", html)
+// }
 
 //emit an event when someone join the specific room
 socket.emit("join", { username, room }, (error) => {

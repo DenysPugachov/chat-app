@@ -32,7 +32,7 @@ io.on("connection", socket => {
 
         socket.join(user.room)
 
-        socket.emit("message", generateMessage("Welcome!"))
+        socket.emit("message", generateMessage("Admin", "Welcome!"))
         socket.broadcast.to(user.room).emit("message", generateMessage("Admin", `${username} has joined the ${room} room.`))
 
         io.to(user.room).emit("roomData", {

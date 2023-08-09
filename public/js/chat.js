@@ -15,6 +15,31 @@ const $sidebarTemplate = document.querySelector("#sidebar-template").innerHTML;
 // parse data from the url(querystring) to object
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
 
+const autoScroll = () => {
+    // get new message element
+    const $newMessageElement = $messages.lastElementChild
+
+    // get height of new message
+    const newMessageStyles = getComputedStyle($newMessageElement)
+    const newMessageMargin = parseInt(newMessageStyles.margin)
+    const newMessageHeight = $newMessageElement.offsetHeight + newMessageMargin
+
+    // get visible height of the screen
+    const visibleHeight = $messages.offsetHeight
+
+    // height of messages container (that we able to scroll through all messages)
+    const containerHeight = $messages.scrollHeight
+
+    // How far am I scrolled down? (form top to scroll line  + scroll height)
+    const scrolledOffset = $messages.scrollTop + visibleHeight
+
+    // use autoscroll only when scroll in the bottom (prewent jumping to the bottom when scroll in not down)
+    if (containerHeight - newMessageHeight <= scrolledOffset) {
+        // scroll the container down
+        $messages.scrollTop = $messages.scrollHeight
+    }
+}
+
 $messageFormInput.focus()
 
 $messageForm.addEventListener("submit", e => {
@@ -94,6 +119,7 @@ function renderMessage(message) {
         createdAt: moment(message.createdAt).format("hh:mm:ss")
     });
     $messages.insertAdjacentHTML("beforeend", messageHTML)
+    autoScroll()
 }
 
 function renderLocationMessage(locationObj) {
@@ -103,15 +129,8 @@ function renderLocationMessage(locationObj) {
         createdAt: moment(locationObj.createdAt).format("hh:mm:ss")
     });
     $messages.insertAdjacentHTML("beforeend", html)
+    autoScroll()
 }
-
-// function renderSidebar({ room, usersInRoom }) {
-//     const html = Mustache.render($sidebarTemplate, {
-//         room,
-//         usersInRoom
-//     })
-//     $chatSidebar.insertAdjacentHTML("beforeend", html)
-// }
 
 //emit an event when someone join the specific room
 socket.emit("join", { username, room }, (error) => {

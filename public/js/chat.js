@@ -30,7 +30,7 @@ const autoScroll = () => {
     // height of messages container (that we able to scroll through all messages)
     const containerHeight = $messages.scrollHeight
 
-    // How far am I scrolled down? (form top to scroll line  + scroll height)
+    // How far am I scrolled down? (hided content to the Top  + visible height)
     const scrolledOffset = $messages.scrollTop + visibleHeight
 
     // use autoscroll only when scroll in the bottom (prewent jumping to the bottom when scroll in not down)
